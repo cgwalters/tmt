@@ -385,8 +385,13 @@ class DebugLevelFilter(logging.Filter):
 
         details: Optional[LogRecordDetails] = getattr(record, 'details', None)
 
+        # Filter out DEBUG messages that don't have TMT's custom details attached.
+        # These are typically from internal Python logging calls that bypass TMT's
+        # logging methods, such as queue worker threads using standard logging.
+        # Without this check, these messages appear in output regardless of the
+        # user's debug level setting (-d/--debug flags).
         if details is None:
-            return True
+            return False
 
         if details.message_debug_level is None:
             return True
