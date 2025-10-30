@@ -644,6 +644,9 @@ class Logger:
 
         handler.setFormatter(LogfileFormatter())
 
+        handler.addFilter(VerbosityLevelFilter())
+        handler.addFilter(DebugLevelFilter())
+        handler.addFilter(QuietnessFilter())
         handler.addFilter(TopicFilter())
 
         self._logger.addHandler(handler)
